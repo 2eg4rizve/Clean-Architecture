@@ -2,7 +2,6 @@
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace Infrastructure.Repositories
 {
@@ -15,28 +14,68 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Product?> GetByIdAsync(int id) =>
-            await _context.Products.FindAsync(id);
+        public async Task<Product?> GetByIdAsync(int id)
+        {
+            try
+            {
+                return await _context.Products.FindAsync(id);
+            }
+            catch (Exception ex)
+            {
+                // Optionally log ex here
+                throw new Exception($"Error fetching product by Id: {ex.Message}", ex);
+            }
+        }
 
-        public async Task<IEnumerable<Product>> GetAllAsync() =>
-            await _context.Products.ToListAsync();
+        public async Task<IEnumerable<Product>> GetAllAsync()
+        {
+            try
+            {
+                return await _context.Products.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error fetching all products: {ex.Message}", ex);
+            }
+        }
 
         public async Task AddAsync(Product product)
         {
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Products.Add(product);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error adding product: {ex.Message}", ex);
+            }
         }
 
         public async Task UpdateAsync(Product product)
         {
-            _context.Products.Update(product);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Products.Update(product);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error updating product: {ex.Message}", ex);
+            }
         }
 
         public async Task DeleteAsync(Product product)
         {
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error deleting product: {ex.Message}", ex);
+            }
         }
     }
 }

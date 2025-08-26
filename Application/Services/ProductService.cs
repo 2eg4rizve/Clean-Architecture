@@ -21,71 +21,106 @@ namespace Application.Services
 
         public async Task<ApiResponse<ProductResponse>> GetProductByIdAsync(int id)
         {
-            var product = await _repository.GetByIdAsync(id);
-            if (product == null)
-                return new ApiResponse<ProductResponse> { Success = false, Message = "Product not found" };
-
-            return new ApiResponse<ProductResponse>
+            try
             {
-                Success = true,
-                Data = _mapper.Map<ProductResponse>(product)
-            };
+                var product = await _repository.GetByIdAsync(id);
+                if (product == null)
+                    return new ApiResponse<ProductResponse> { Success = false, Message = "Product not found" };
+
+                return new ApiResponse<ProductResponse>
+                {
+                    Success = true,
+                    Data = _mapper.Map<ProductResponse>(product)
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<ProductResponse> { Success = false, Message = ex.Message };
+            }
         }
 
         public async Task<ApiResponse<IEnumerable<ProductResponse>>> GetAllProductsAsync()
         {
-            var products = await _repository.GetAllAsync();
-            return new ApiResponse<IEnumerable<ProductResponse>>
+            try
             {
-                Success = true,
-                Data = _mapper.Map<IEnumerable<ProductResponse>>(products)
-            };
+                var products = await _repository.GetAllAsync();
+                return new ApiResponse<IEnumerable<ProductResponse>>
+                {
+                    Success = true,
+                    Data = _mapper.Map<IEnumerable<ProductResponse>>(products)
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<IEnumerable<ProductResponse>> { Success = false, Message = ex.Message };
+            }
         }
 
         public async Task<ApiResponse<ProductResponse>> CreateProductAsync(ProductRequest request)
         {
-            var product = _mapper.Map<Product>(request);
-            await _repository.AddAsync(product);
-
-            return new ApiResponse<ProductResponse>
+            try
             {
-                Success = true,
-                Message = "Product created successfully",
-                Data = _mapper.Map<ProductResponse>(product)
-            };
+                var product = _mapper.Map<Product>(request);
+                await _repository.AddAsync(product);
+
+                return new ApiResponse<ProductResponse>
+                {
+                    Success = true,
+                    Message = "Product created successfully",
+                    Data = _mapper.Map<ProductResponse>(product)
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<ProductResponse> { Success = false, Message = ex.Message };
+            }
         }
 
         public async Task<ApiResponse<ProductResponse>> UpdateProductAsync(int id, ProductRequest request)
         {
-            var product = await _repository.GetByIdAsync(id);
-            if (product == null)
-                return new ApiResponse<ProductResponse> { Success = false, Message = "Product not found" };
-
-            _mapper.Map(request, product);
-            await _repository.UpdateAsync(product);
-
-            return new ApiResponse<ProductResponse>
+            try
             {
-                Success = true,
-                Message = "Product updated successfully",
-                Data = _mapper.Map<ProductResponse>(product)
-            };
+                var product = await _repository.GetByIdAsync(id);
+                if (product == null)
+                    return new ApiResponse<ProductResponse> { Success = false, Message = "Product not found" };
+
+                _mapper.Map(request, product);
+                await _repository.UpdateAsync(product);
+
+                return new ApiResponse<ProductResponse>
+                {
+                    Success = true,
+                    Message = "Product updated successfully",
+                    Data = _mapper.Map<ProductResponse>(product)
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<ProductResponse> { Success = false, Message = ex.Message };
+            }
         }
 
         public async Task<ApiResponse<bool>> DeleteProductAsync(int id)
         {
-            var product = await _repository.GetByIdAsync(id);
-            if (product == null)
-                return new ApiResponse<bool> { Success = false, Message = "Product not found" };
-
-            await _repository.DeleteAsync(product);
-
-            return new ApiResponse<bool>
+            try
             {
-                Success = true,
-                Message = "Product deleted successfully",
-                Data = true
-            };
+                var product = await _repository.GetByIdAsync(id);
+                if (product == null)
+                    return new ApiResponse<bool> { Success = false, Message = "Product not found" };
+
+                await _repository.DeleteAsync(product);
+
+                return new ApiResponse<bool>
+                {
+                    Success = true,
+                    Message = "Product deleted successfully",
+                    Data = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<bool> { Success = false, Message = ex.Message, Data = false };
+            }
         }
     }
 }
