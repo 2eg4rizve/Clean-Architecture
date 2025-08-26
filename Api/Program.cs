@@ -5,7 +5,7 @@ using Application.Services;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +18,10 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
 // AutoMapper
-builder.Services.AddAutoMapper(typeof(ProductProfile).Assembly);
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddProfile<ProductProfile>();
+});
 
 // Controllers & Swagger
 builder.Services.AddControllers();
@@ -26,6 +29,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -36,5 +41,4 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-
 app.Run();
