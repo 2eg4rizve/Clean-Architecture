@@ -58,6 +58,13 @@ namespace Application.Services
 
         public async Task<ApiResponse<ProductResponse>> CreateProductAsync(ProductRequest request)
         {
+            if (request.Stock <= 0)
+                return new ApiResponse<ProductResponse>
+                {
+                    Success = false,
+                    Message = "Stock must be greater than 0"
+                };
+
             try
             {
                 var product = _mapper.Map<Product>(request);
@@ -72,7 +79,11 @@ namespace Application.Services
             }
             catch (Exception ex)
             {
-                return new ApiResponse<ProductResponse> { Success = false, Message = ex.Message };
+                return new ApiResponse<ProductResponse>
+                {
+                    Success = false,
+                    Message = $"Error creating product: {ex.Message}"
+                };
             }
         }
 
