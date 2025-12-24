@@ -2,12 +2,8 @@
 
 namespace Application.InterfacesRepository
 {
-    public interface IProductRepository
+    public interface IProductRepository : IGenericRepository<Product>
     {
-        Task<Product?> GetByIdAsync(int id);
-        Task<IEnumerable<Product>> GetAllAsync();
-        Task AddAsync(Product product);
-        Task UpdateAsync(Product product);
-        Task DeleteAsync(Product product);
+        // Product-specific queries go here
     }
 }
