@@ -19,7 +19,7 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ApiResponse<ProductResponse>> GetProductByIdAsync(int id)
+        public async Task<ApiResponse<ProductResponse>> GetProductByIdAsync(Guid id)
         {
             var product = await _unitOfWork.Products.GetByIdAsync(id);
 
@@ -70,7 +70,7 @@ namespace Application.Services
             };
         }
 
-        public async Task<ApiResponse<ProductResponse>> UpdateProductAsync(int id, ProductRequest request)
+        public async Task<ApiResponse<ProductResponse>> UpdateProductAsync(Guid id, ProductRequest request)
         {
             var product = await _unitOfWork.Products.GetByIdAsync(id);
 
@@ -94,7 +94,7 @@ namespace Application.Services
             };
         }
 
-        public async Task<ApiResponse<bool>> DeleteProductAsync(int id)
+        public async Task<ApiResponse<bool>> DeleteProductAsync(Guid id)
         {
             var product = await _unitOfWork.Products.GetByIdAsync(id);
 

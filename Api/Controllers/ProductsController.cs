@@ -23,7 +23,7 @@ namespace Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var response = await _service.GetProductByIdAsync(id);
             return response.Success ? Ok(response) : NotFound(response);
@@ -37,14 +37,14 @@ namespace Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, ProductRequest request)
+        public async Task<IActionResult> Update(Guid id, ProductRequest request)
         {
             var response = await _service.UpdateProductAsync(id, request);
             return response.Success ? Ok(response) : NotFound(response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var response = await _service.DeleteProductAsync(id);
             return response.Success ? Ok(response) : NotFound(response);
